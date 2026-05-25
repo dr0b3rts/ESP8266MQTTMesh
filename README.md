@@ -1,9 +1,12 @@
 # ESP8266MQTTMesh
 Self-assembling mesh network built around the MQTT protocol for the ESP8266 with OTA support
 
+## NOTE 2020-04
+I no longer have resources to work on this, and there are several issues that need to be addressed.  If you have the desire and skill to contribute to this project, please comment on https://github.com/PhracturedBlue/ESP8266MQTTMesh/issues/75 and I will consider your offer of help
+
 ## Overview
 This code provides a library that can build a mesh network between ESP8266 devices that will allow all nodes to communicate
-with an MQTT broker.  At least one node must be able to see a wiFi router, and there must me a host on the WiFi network running
+with an MQTT broker.  At least one node must be able to see a wiFi router, and there must be a host on the WiFi network running
 the MQTT broker.
 Nodes cannot (generally) communicate between themselves, but instead forward all messages through the broker.
 Each node will expose a hidden AP which can be connected to from any other node on the network.  Note:  hiding the AP does not provide
@@ -42,7 +45,7 @@ PlatformIO is strongly recommended, and installation instructions can be found [
 
 **NOTE:** Enabling SSL will add ~70kB to the firmware size, and may make it impossible to use OTA updates depending on firmware and flash size.
 
-If OTA support is desired, the esp8266 module must have at least 1M or Flash (configured as >=784k ROM).  The OTA image is stored
+If OTA support is desired, the esp8266 module must have at least 1M of Flash (configured as >=784k ROM).  The OTA image is stored
 between the end of the firmware image and the beginning of the filesystem (i.e. not in the filesystem itself) or the end of flash if
 no filesystem is present.  Thus, ithe maximum firmware size is ~ 1/2 the available Flash.
 
@@ -114,7 +117,7 @@ setMeshSSL(cert, cert_len, key, key_len, fingerprint)
 - `uint8_t *fingerprint`: Certificate fingerprint (SHA1 of certificate)
 
 ### Interacting with the mesh
-Besides the constructor, the code must call the `begin()` method during setup, and the `loop()` method in the main loop
+Besides the constructor, the code must call the `begin()` method during setup.
 
 If messages need to be received by the node, execute the `callback()` function during setup with a function pointer
 (prototype: `void callback(const char *topic, const char *payload)`)
@@ -129,7 +132,7 @@ function will send messages with the `in_topic` prefix and will be relayed back 
 
 - `const char *topic`: the message topic (will be appended to the topic-prefix)
 - `const char *payload`: The message to send (must be less than 1152 bytes in length)
-- `enum MSG_TYPE msgCmd`: The MQTT Retail/QoS partameters (optional).  Must be one of: `MSG_TYPE_NONE`,
+- `enum MSG_TYPE msgCmd`: The MQTT Retail/QoS parameters (optional).  Must be one of: `MSG_TYPE_NONE`,
   `MSG_TYPE_QOS_0`, `MSG_TYPE_QOS_1`, `MSG_TYPE_QOS_2`, `MSG_TYPE_RETAIN_QOS_0`, MSG_TYPE_RETAIN_QOS_1`,
   `MSG_TYPE_RETAIN_QOS_2`.  Default: `MSG_TYPE_NONE`
 
